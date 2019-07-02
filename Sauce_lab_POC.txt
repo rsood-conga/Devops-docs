@@ -1,0 +1,127 @@
+https://wiki.saucelabs.com/display/DOCS/Troubleshooting+Sauce+Connect
+
+SAUCE LAB POC
+
+ docker build . -t sauce_connect_poc
+ 
+  docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+sauce_connect_poc   latest              36524d8ded14        18 hours ago        592MB
+
+
+ export SAUCE_USERNAME=rajbsood
+ export SAUCE_ACCESS_KEY=8745ace1-1dff-4701-9469-437df64b9ecd
+ 
+ bin/sc -u rajbsood -k 8745ace1-1dff-4701-9469-437df64b9ecd
+ 
+ 
+ telnet saucelabs.com 443 
+ 
+ #####################IBM LOGIN####################################
+ PS C:\sandbox\sauce_lab_poc> ibmcloud login --sso
+API endpoint: https://api.eu-gb.bluemix.net
+
+One Time Code (Get one at https://iam.eu-gb.bluemix.net/identity/passcode)>
+Authenticating...
+OK
+
+Select an account:
+1. IBM (90488ffecf50473ba57279d415e24aef)
+2. Ted Bauer's Account (547c003b17058cb5305d4ebef2768ea6) <-> 759637
+Enter a number> 1
+Targeted account IBM (90488ffecf50473ba57279d415e24aef)
+
+Targeted resource group Default
+
+
+API endpoint:      https://api.eu-gb.bluemix.net
+Region:            eu-gb
+User:              rajbsood@in.ibm.com
+Account:           IBM (90488ffecf50473ba57279d415e24aef)
+Resource group:    Default
+CF API endpoint:
+Org:
+Space:
+###############################################################
+
+######################login to IBMCLOUD REGISTRY###################
+PS C:\sandbox\sauce_lab_poc> ibmcloud cr login
+Logging in to 'registry.eu-gb.bluemix.net'...
+Logged in to 'registry.eu-gb.bluemix.net'.
+###############################################'registry.eu-gb.bluemix.net'...##################
+ 
+##############TAG THE VALIDATED IMAGE IN THE IBM CLOUD CONTAINER REGISTRY##################### 
+docker tag cff943fe80b3 registry.eu-gb.bluemix.net/cloudservices-shared/rajbsoodsauce-ubuntu-1604-5
+
+PS C:\sandbox\sauce_lab_poc> docker image ls
+REPOSITORY                                                                    TAG                 IMAGE ID            CR
+EATED             SIZE
+registry.eu-gb.bluemix.net/cloudservices-shared/rajbsoodsauce-ubuntu-1604-5   latest              cff943fe80b3        20
+ minutes ago      594MB
+ 
+############################################################################
+ 
+ 
+#############PUSH YOUR DOCKER CONTAINER TO THE IBM CLOUD DOCKER REGISTRY#############
+PS C:\sandbox\sauce_lab_poc> ibmcloud cr build -t registry.eu-gb.bluemix.net/cloudservices-shared/rajbsoodsauce-ubuntu-1
+604-5 .
+Sending build context to Docker daemon  37.62MB
+FAILED
+Status: You are not authorized to access the specified resource., Code: 1
+
+####################################################### E R R O R###################
+
+https://console.bluemix.net/docs/services/Registry/index.html#index
+
+
+######################################## add namespace###################
+PS C:\sandbox\sauce_lab_poc> ibmcloud cr namespace-add cloudservices-shared
+Adding namespace 'cloudservices-shared'...
+
+Successfully added namespace 'cloudservices-shared'
+
+OK
+PS C:\sandbox\sauce_lab_poc> ibmcloud cr namespace-list
+Listing namespaces...
+
+Namespace
+mykube
+rajbir_namespace
+rajkey
+cloudservices-shared
+
+
+##########################################################################
+OK
+PS C:\sandbox\sauce_lab_poc> ibmcloud cr build -t registry.eu-gb.bluemix.net/cloudservices-shared/rajbsoodsauce-ubuntu-1
+604-5 .
+
+OK
+####################
+
+PS C:\sandbox\sauce_lab_poc> ibmcloud cr image-list
+Listing images...
+
+REPOSITORY                                                                    TAG                                DIGEST
+        NAMESPACE              CREATED         SIZE     SECURITY STATUS
+registry.eu-gb.bluemix.net/cloudservices-shared/rajbsoodsauce-ubuntu-1604-5   latest                             e529993
+1518a   cloudservices-shared   2 minutes ago   248 MB   No Issues
+registry.eu-gb.bluemix.net/mykube/hello-containers-20180830082838078          1                                  ad35581
+
+
+
+
+
+  sc -u rajbsood -k 8745ace1-1dff-4701-9469-437df64b9ecd 
+13 Dec 08:09:29 - Sauce Connect 4.5.2, build 4485 4a87b52 
+13 Dec 08:09:29 - Using CA certificate bundle /etc/ssl/certs/ca-certificates.crt.
+13 Dec 08:09:29 - Using CA certificate verify path /etc/ssl/certs.
+13 Dec 08:09:29 - Starting up; pid 57
+13 Dec 08:09:29 - Command line arguments: sc -u rajbsood -k **** 
+13 Dec 08:09:29 - Log file: /tmp/sc.log
+13 Dec 08:09:29 - Pid file: /tmp/sc_client.pid
+13 Dec 08:09:29 - Timezone: UTC GMT offset: 0h
+13 Dec 08:09:29 - Using no proxy for connecting to Sauce Labs REST API.
+13 Dec 08:10:09 - Error in checkUpdate: couldn't connect to https://saucelabs.com/versions.json: Get https://saucelabs.com/versions.json: dial tcp: lookup saucelabs.com on 8.8.4.4:53: read udp 172.17.0.4:55025->8.8.4.4:53: i/o timeout
+13 Dec 08:10:09 - Started scproxy on port 44933.
+13 Dec 08:10:09 - Please wait for 'you may start your tests' to start your tests.
